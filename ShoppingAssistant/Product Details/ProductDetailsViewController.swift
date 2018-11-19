@@ -29,7 +29,7 @@ class ProductDetailsViewController: UIViewController, UITableViewDelegate, UITab
     }
 
     func getProductDetails() {
-        let getProdDetailsUrl = "https://price-api.datayuge.com/api/v1/compare/detail?api_key=(YourApiKey)&id=\(productId)"
+        let getProdDetailsUrl = "https://price-api.datayuge.com/api/v1/compare/detail?api_key=V0wcRy0SYsCOiodZ7US2zFIcjUnbCIeyCnu&id=\(productId)"
         loadingView.startAnimating()
         NetworkManager.getDictResponseFromUrl(url: getProdDetailsUrl, parameters: [:], completionHandler: {
             [weak self]

@@ -7,25 +7,181 @@
 //
 
 import UIKit
+import AVKit
+import Photos
+import CoreML
+import Vision
 
-class ViewController: UIViewController {
+enum AttachmentType: String{
+    case camera, video, photoLibrary
+}
 
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+//    let mlModel = AppleDevice()
+    let mlModle = RiceSoupClassifier()
+    
+    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var descriptionLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
     @IBAction func getProductDataButtonTapped(_ sender: Any) {
+//
+//        let prodListVC = storyboard?.instantiateViewController(withIdentifier: "ProductsListViewControllerId") as! ProductsListViewController
+//
+//        navigationController?.show(prodListVC, sender: self)
+        showAttachmentActionSheet()
+    }
+    
+    func showAttachmentActionSheet() {
+        let actionSheet = UIAlertController(title: "Choose media type", message: "This will be used to identify the image", preferredStyle: .actionSheet)
         
-        let prodListVC = storyboard?.instantiateViewController(withIdentifier: "ProductsListViewControllerId") as! ProductsListViewController
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { (action) -> Void in
+            self.authorisationStatus(attachmentTypeEnum: .camera)
+        }))
         
-        navigationController?.show(prodListVC, sender: self)
+        actionSheet.addAction(UIAlertAction(title: "Gallery", style: .default, handler: { (action) -> Void in
+            self.authorisationStatus(attachmentTypeEnum: .photoLibrary)
+        }))
+        
+        //        actionSheet.addAction(UIAlertAction(title: Constants.video, style: .default, handler: { (action) -> Void in
+        //            self.authorisationStatus(attachmentTypeEnum: .video, vc: self.currentVC!)
+        //
+        //        }))
+        
+        //        actionSheet.addAction(UIAlertAction(title: Constants.file, style: .default, handler: { (action) -> Void in
+        //            self.documentPicker()
+        //        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
+    
+    func authorisationStatus(attachmentTypeEnum: AttachmentType){
+        
+        if attachmentTypeEnum ==  AttachmentType.camera{
+            let status = AVCaptureDevice.authorizationStatus(for: .video)
+            switch status{
+            case .authorized: // The user has previously granted access to the camera.
+                openCamera()
+                
+            case .notDetermined: // The user has not yet been asked for camera access.
+                AVCaptureDevice.requestAccess(for: .video) { granted in
+                    if granted {
+                        self.openCamera()
+                    }
+                }
+                //denied - The user has previously denied access.
+                //restricted - The user can't grant access due to restrictions.
+                //        case .denied, .restricted:
+                //            addAlertForSettings(attachmentTypeEnum)
+                return
+                
+            default:
+                break
+            }
+        }
+            
+        else if attachmentTypeEnum == AttachmentType.photoLibrary {
+            let status = PHPhotoLibrary.authorizationStatus()
+            switch status{
+            case .authorized:
+                if attachmentTypeEnum == AttachmentType.photoLibrary{
+                    photoLibrary()
+                }
+                
+//                            if attachmentTypeEnum == AttachmentType.video{
+//                                videoLibrary()
+//                            }
+
+                        case .notDetermined:
+                            PHPhotoLibrary.requestAuthorization({ (status) in
+                                if status == PHAuthorizationStatus.authorized{
+                                    // photo library access given
+                                    self.photoLibrary()
+                                }
+                                
+                        })
+            default:
+                break
+            }
+        }
+    }
+    
+    func openCamera() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera){
+            let myPickerController = UIImagePickerController()
+            myPickerController.delegate = self
+            myPickerController.sourceType = .camera
+            present(myPickerController, animated: true, completion: nil)
+        }
+    }
+    
+    func photoLibrary(){
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary){
+            let myPickerController = UIImagePickerController()
+            myPickerController.delegate = self
+            myPickerController.sourceType = .photoLibrary
+            present(myPickerController, animated: true, completion: nil)
+        }
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            descriptionLabel.text = "Thinking"
+            
+            // Set the image view
+            imageView.contentMode = .scaleAspectFit
+            imageView.image = pickedImage
+            
+            // Get the model
+            guard let model = try? VNCoreMLModel(for: AppleDevice().model) else {
+                fatalError("Unable to load model")
+            }
+            
+            // Create vision request
+            let request = VNCoreMLRequest(model: model) {[weak self] request, error in
+                guard let results = request.results as? [VNClassificationObservation],
+                    let topResult = results.first
+                    else {
+                        fatalError("Unexpected results")
+                }
+                
+                // Update the main UI thread with our result
+                DispatchQueue.main.async {[weak self] in
+                    self?.descriptionLabel.text = "\(topResult.identifier) with \(Int(topResult.confidence * 100))% confidence"
+                }
+            }
+            
+            guard let ciImage = CIImage(image: pickedImage)
+                else { fatalError("Cannot read picked image")}
+            
+            // Run the classifier
+            let handler = VNImageRequestHandler(ciImage: ciImage)
+            DispatchQueue.global().async {
+                do {
+                    try handler.perform([request])
+                } catch {
+                    print(error)
+                }
+            }
+        }
+        
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
