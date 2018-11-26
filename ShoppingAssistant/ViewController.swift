@@ -18,15 +18,29 @@ enum AttachmentType: String{
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-//    let mlModel = AppleDevice()
-    let mlModle = RiceSoupClassifier()
+    let mlModel = AppleDevice()
+//    let mlModle = RiceSoupClassifier()
     
+    @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        searchButton.layer.cornerRadius = 5
+        searchButton.layer.borderColor = UIColor.black.cgColor
+        searchButton.layer.borderWidth = 1
+        
+        imageView.layer.cornerRadius = 5
+        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.borderWidth = 1
+        
+        imageView.layer.shadowColor = UIColor.lightGray.cgColor
+        imageView.layer.shadowOffset = CGSize(width: 0, height: 5)
+        imageView.layer.shadowOpacity = 0.5
+        imageView.layer.shadowRadius = 1.0
+        imageView.clipsToBounds = false
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -142,6 +156,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            descriptionLabel.isHidden = false
             descriptionLabel.text = "Thinking"
             
             // Set the image view
@@ -163,7 +178,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 
                 // Update the main UI thread with our result
                 DispatchQueue.main.async {[weak self] in
-                    self?.descriptionLabel.text = "\(topResult.identifier) with \(Int(topResult.confidence * 100))% confidence"
+                    self?.showAlertForProductFound(result: topResult.identifier, confidence: Int(topResult.confidence * 100))
+//                    self?.descriptionLabel.text = "\(topResult.identifier) with \(Int(topResult.confidence * 100))% confidence"
+                    self?.descriptionLabel.text = "\(topResult.identifier)"
                 }
             }
             
@@ -182,6 +199,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         
         picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func showAlertForProductFound(result: String, confidence: Int) {
+        // create the alert
+        let alert = UIAlertController(title: result, message: "Is it the product you are searching for?", preferredStyle: .alert)
+        
+        // add an action (button)
+        alert.addAction(UIAlertAction(title: "Yes, Proceed", style: .default, handler: {(action:UIAlertAction!) in
+            self.getProdDetails(prodName: result)
+        }))
+        
+        alert.addAction(UIAlertAction(title: "No, Rescan", style: .cancel, handler: nil))
+
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func getProdDetails(prodName: String) {
+        let prodListVC = storyboard?.instantiateViewController(withIdentifier: "ProductsListViewControllerId") as! ProductsListViewController
+        prodListVC.prodName = prodName
+        navigationController?.show(prodListVC, sender: self)
     }
 }
 

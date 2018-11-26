@@ -14,7 +14,7 @@ var productName = ""
 class ProductsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var productListDataModel : ProductListDataModel?
-    
+    var prodName = ""
     @IBOutlet weak var loadingView: NVActivityIndicatorView!
     @IBOutlet weak var listTableView: UITableView!
     
@@ -30,7 +30,7 @@ class ProductsListViewController: UIViewController, UITableViewDelegate, UITable
     }
 
     func getAllProducts() {
-        let getProdListUrl = "https://price-api.datayuge.com/api/v1/compare/search?product=iPhone%207&api_key=\(API_KEY)"
+        let getProdListUrl = "https://price-api.datayuge.com/api/v1/compare/search?product=\(prodName)&api_key=\(API_KEY)"
         loadingView.startAnimating()
         NetworkManager.getDictResponseFromUrl(url: getProdListUrl, parameters: [:], completionHandler: {
             [weak self]
