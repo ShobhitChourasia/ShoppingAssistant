@@ -11,5 +11,5 @@ target 'ShoppingAssistant' do
     pod 'ObjectMapper', '~> 3.3'
     pod 'Kingfisher', '~> 4.0'
     pod 'NVActivityIndicatorView'
-
+    pod 'Cosmos', '~> 17.0'
 end

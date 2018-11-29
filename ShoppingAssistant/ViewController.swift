@@ -27,19 +27,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchButton.layer.cornerRadius = 5
-        searchButton.layer.borderColor = UIColor.black.cgColor
-        searchButton.layer.borderWidth = 1
+//        searchButton.layer.cornerRadius = 5
+//        searchButton.layer.borderColor = UIColor.black.cgColor
+//        searchButton.layer.borderWidth = 1
         
         imageView.layer.cornerRadius = 5
-        imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.layer.borderColor = UIColor.gray.cgColor
         imageView.layer.borderWidth = 1
+//        imageView.layer.masksToBounds = true;
+
         
         imageView.layer.shadowColor = UIColor.lightGray.cgColor
         imageView.layer.shadowOffset = CGSize(width: 0, height: 5)
         imageView.layer.shadowOpacity = 0.5
         imageView.layer.shadowRadius = 1.0
-        imageView.clipsToBounds = false
+//        imageView.clipsToBounds = false
         
     }
     
@@ -210,7 +212,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.getProdDetails(prodName: result)
         }))
         
-        alert.addAction(UIAlertAction(title: "No, Rescan", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "No, Rescan", style: .cancel, handler: {(action:UIAlertAction!) in
+            self.showAttachmentActionSheet()
+        }))
 
         // show the alert
         self.present(alert, animated: true, completion: nil)
