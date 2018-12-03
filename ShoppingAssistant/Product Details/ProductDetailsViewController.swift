@@ -21,11 +21,38 @@ class ProductDetailsViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = productName
-        loadingView.type = .ballClipRotate
-        loadingView.color = UIColor.orange
-        storeListTableView.isHidden = true
-        getProductDetails()
+        
+//        let yourBackImage = UIImage(named: "back.png")
+//        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+////        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+//        navigationController?.navigationBar.backItem?.title = ""
+////        if (productDeatilsModel?.data?.is_available ?? true) {
+//            let BarButtonItemAppearance = UIBarButtonItem.appearance()
+//            BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        
+            title = productName.uppercased()
+            loadingView.type = .ballClipRotate
+            loadingView.color = UIColor.orange
+            storeListTableView.isHidden = true
+            
+            getProductDetails()
+//        }
+//        else {
+//            // create the alert
+//            let alert = UIAlertController(title: "Oops!", message: "DataYuge is not able to fetch the data at this time, please try agai later.", preferredStyle: UIAlertController.Style.alert)
+//
+//            // add an action (button)
+//            alert.addAction(UIAlertAction(title: "Go Back", style: UIAlertAction.Style.default, handler: { (action) -> Void in
+//                self.goBack()
+//            }))
+//
+//            // show the alert
+//            self.present(alert, animated: true, completion: nil)
+//        }
+    }
+    
+    func goBack() {
+        navigationController?.popViewController(animated: true)
     }
 
     func getProductDetails() {
@@ -42,14 +69,13 @@ class ProductDetailsViewController: UIViewController, UITableViewDelegate, UITab
                     self?.productDeatilsModel = ProductDetailsDataModel(dictionary: responseDict as NSDictionary)
                     
                     print("Store count = \(String(describing: self?.productDeatilsModel?.data?.stores?.count))")
-//                    print("Store count = \(String(describing: self?.productDeatilsModel?.data?.stores?[0].amazon?.product_store))")
-//                    print("Store count = \(String(describing: self?.productDeatilsModel?.data?.stores?[1].amazon?.product_store))")
-//                    print("Store count = \(String(describing: self?.productDeatilsModel?.data?.stores?[2].amazon?.product_store))")
+
                     DispatchQueue.main.async {
                         [weak self] in
-                        self?.storeListTableView.isHidden = false
-                        self?.storeListTableView.reloadData()
+//                        self?.storeListTableView.isHidden = false
+//                        self?.storeListTableView.reloadData()
                         self?.loadingView.stopAnimating()
+                        self?.checkForAvailability()
                     }
                 }
             }
@@ -59,6 +85,24 @@ class ProductDetailsViewController: UIViewController, UITableViewDelegate, UITab
         })
     }
     
+    func checkForAvailability() {
+        if !(productDeatilsModel?.data?.is_available ?? true) {
+        // create the alert
+        let alert = UIAlertController(title: "Oops!", message: "DataYuge is not able to fetch the data at this time, please try agai later.", preferredStyle: UIAlertController.Style.alert)
+        
+        // add an action (button)
+        alert.addAction(UIAlertAction(title: "Go Back", style: UIAlertAction.Style.default, handler: { (action) -> Void in
+            self.goBack()
+        }))
+        
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+        }
+        else {
+            storeListTableView.isHidden = false
+            storeListTableView.reloadData()
+        }
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return productDeatilsModel?.data?.stores?.count ?? 0

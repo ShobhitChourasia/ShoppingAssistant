@@ -20,17 +20,26 @@ class ProductsListViewController: UIViewController, UITableViewDelegate, UITable
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        title = prodName
+//        let yourBackImage = UIImage(named: "back.png")
+//        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+////        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+//        navigationController?.navigationBar.backItem?.title = ""
+//        let BarButtonItemAppearance = UIBarButtonItem.appearance()
+//        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        
         loadingView.type = .ballClipRotate
         loadingView.color = UIColor.orange
         listTableView.isHidden = true
         
-//        NVActivityIndicatorView(frame: CGRect(x: view.frame.size.width/2 - 15, y: view.frame.size.height/2 - 15, width: 30, height: 30), type: .audioEqualizer, color: UIColor.orange, padding: 1.0)
         getAllProducts()
-        // Do any additional setup after loading the view.
     }
 
     func getAllProducts() {
-        let getProdListUrl = "https://price-api.datayuge.com/api/v1/compare/search?product=\(prodName)&api_key=\(API_KEY)"
+        let prodString = prodName.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+
+        let getProdListUrl = "https://price-api.datayuge.com/api/v1/compare/search?product=\(prodString ?? "")&api_key=\(API_KEY)"
         loadingView.startAnimating()
         NetworkManager.getDictResponseFromUrl(url: getProdListUrl, parameters: [:], completionHandler: {
             [weak self]

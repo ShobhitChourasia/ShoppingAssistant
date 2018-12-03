@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		11C99CF1521AF3804DC9E2DF /* Pods_ShoppingAssistant.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 33E35A661E631B08C560F475 /* Pods_ShoppingAssistant.framework */; };
+		1303FC8721B2745F007353B2 /* AppleDevice.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 1303FC8621B2745E007353B2 /* AppleDevice.mlmodel */; };
 		EE4A77D521285FC3009F3618 /* ItemDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4A77D121285FC3009F3618 /* ItemDataModel.swift */; };
 		EE4A77D621285FC3009F3618 /* StoresModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4A77D221285FC3009F3618 /* StoresModel.swift */; };
 		EE4A77D721285FC3009F3618 /* ProductDetailsDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4A77D321285FC3009F3618 /* ProductDetailsDataModel.swift */; };
@@ -15,7 +16,6 @@
 		EE4A77DB2128627D009F3618 /* ProductDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4A77DA2128627D009F3618 /* ProductDetailsViewController.swift */; };
 		EE4A77DD21289F54009F3618 /* ItemDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4A77DC21289F54009F3618 /* ItemDetailTableViewCell.swift */; };
 		EE4A77DF2129BE12009F3618 /* StoreWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE4A77DE2129BE12009F3618 /* StoreWebViewController.swift */; };
-		EE945A0D21A0704C00961F69 /* AppleDevice.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = EE945A0C21A0704C00961F69 /* AppleDevice.mlmodel */; };
 		EEF96A9021234E7D00C7A44A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF96A8F21234E7D00C7A44A /* AppDelegate.swift */; };
 		EEF96A9221234E7D00C7A44A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEF96A9121234E7D00C7A44A /* ViewController.swift */; };
 		EEF96A9521234E7D00C7A44A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EEF96A9321234E7D00C7A44A /* Main.storyboard */; };
@@ -34,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1303FC8621B2745E007353B2 /* AppleDevice.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AppleDevice.mlmodel; sourceTree = "<group>"; };
 		1C15E59E919D01E39907A5B5 /* Pods-ShoppingAssistant.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShoppingAssistant.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShoppingAssistant/Pods-ShoppingAssistant.debug.xcconfig"; sourceTree = "<group>"; };
 		1C7B4C15C8E69A2C2C31BB01 /* Pods-ShoppingAssistant.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShoppingAssistant.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShoppingAssistant/Pods-ShoppingAssistant.release.xcconfig"; sourceTree = "<group>"; };
 		33E35A661E631B08C560F475 /* Pods_ShoppingAssistant.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShoppingAssistant.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -44,7 +45,6 @@
 		EE4A77DA2128627D009F3618 /* ProductDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsViewController.swift; sourceTree = "<group>"; };
 		EE4A77DC21289F54009F3618 /* ItemDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailTableViewCell.swift; sourceTree = "<group>"; };
 		EE4A77DE2129BE12009F3618 /* StoreWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreWebViewController.swift; sourceTree = "<group>"; };
-		EE945A0C21A0704C00961F69 /* AppleDevice.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AppleDevice.mlmodel; sourceTree = "<group>"; };
 		EEF96A8C21234E7D00C7A44A /* ShoppingAssistant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShoppingAssistant.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEF96A8F21234E7D00C7A44A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EEF96A9121234E7D00C7A44A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -162,7 +162,7 @@
 		EEF96AAA21247A3300C7A44A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				EE945A0C21A0704C00961F69 /* AppleDevice.mlmodel */,
+				1303FC8621B2745E007353B2 /* AppleDevice.mlmodel */,
 				EE4A77D021285FAF009F3618 /* ProductData */,
 				EEF96AB52124976100C7A44A /* ProductListings */,
 			);
@@ -337,7 +337,7 @@
 				EEF96ACA2125E41600C7A44A /* Filters.swift in Sources */,
 				EEF96AA221234F0500C7A44A /* ProductDataViewController.swift in Sources */,
 				EEF96AC92125E41600C7A44A /* ProductData.swift in Sources */,
-				EE945A0D21A0704C00961F69 /* AppleDevice.mlmodel in Sources */,
+				1303FC8721B2745F007353B2 /* AppleDevice.mlmodel in Sources */,
 				EEF96ACC2125E41600C7A44A /* ProductListDataModel.swift in Sources */,
 				EE4A77D521285FC3009F3618 /* ItemDataModel.swift in Sources */,
 			);

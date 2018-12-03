@@ -60,7 +60,9 @@ public class StoresModel {
                 }
             }
             if dictionary.allKeys.count > 0 {
-                amazon = StoreDataModel(dictionary: dictionary[dictionary.allKeys.first!] as! NSDictionary)
+                if (dictionary[dictionary.allKeys.first!] as? NSDictionary) != nil {
+                    amazon = StoreDataModel(dictionary: dictionary[dictionary.allKeys.first!] as! NSDictionary)
+                }
             }
         }
 	}

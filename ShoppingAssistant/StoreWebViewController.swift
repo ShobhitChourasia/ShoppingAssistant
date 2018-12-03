@@ -18,6 +18,13 @@ class StoreWebViewController: UIViewController, WKUIDelegate, WKNavigationDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let yourBackImage = UIImage(named: "back.png")
+//        self.navigationController?.navigationBar.backIndicatorImage = yourBackImage
+//        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = yourBackImage
+////        self.navigationController?.navigationBar.backItem?.title = ""
+//        let BarButtonItemAppearance = UIBarButtonItem.appearance()
+//        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: UIColor.clear], for: .normal)
+        
         title = storeName
         // Do any additional setup after loading the view, typically from a nib.
         

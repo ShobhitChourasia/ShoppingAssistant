@@ -35,9 +35,10 @@ class SearchedItemTableViewCell: UITableViewCell {
         
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .currency
+        numberFormatter.maximumFractionDigits = 0
         numberFormatter.locale = Locale(identifier: "en_IN")
-        let price = numberFormatter.string(from: prodModel.product_lowest_price as! NSNumber)
-        priceLabel.text = "₹" + price!//"\(prodModel.product_lowest_price ?? 0)"
+        let price = numberFormatter.string(from: prodModel.product_lowest_price! as NSNumber)
+        priceLabel.text = price!
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

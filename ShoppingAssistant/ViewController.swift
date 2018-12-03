@@ -70,6 +70,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             self.authorisationStatus(attachmentTypeEnum: .photoLibrary)
         }))
         
+        actionSheet.addAction(UIAlertAction(title: "Text Search", style: .default, handler: { (action) -> Void in
+            self.showTextSearchAlert()
+        }))
+        
         //        actionSheet.addAction(UIAlertAction(title: Constants.video, style: .default, handler: { (action) -> Void in
         //            self.authorisationStatus(attachmentTypeEnum: .video, vc: self.currentVC!)
         //
@@ -84,6 +88,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         present(actionSheet, animated: true, completion: nil)
     }
     
+    func showTextSearchAlert() {
+    //1. Create the alert controller.
+    let alert = UIAlertController(title: "Looking for", message: "Enter the product name you are looking for", preferredStyle: .alert)
+    
+    //2. Add the text field. You can configure it however you need.
+    alert.addTextField { (textField) in
+        textField.placeholder = "Product Name"
+    }
+    
+    // 3. Grab the value from the text field, and print it when the user clicks OK.
+    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+        let textField = alert!.textFields![0] // Force unwrapping because we know it exists.
+        self.getProdDetails(prodName: textField.text ?? "")
+//        print("Text field: \(String(describing: textField.text))")
+    }))
+    
+    // 4. Present the alert.
+    self.present(alert, animated: true, completion: nil)
+
+    }
     
     func authorisationStatus(attachmentTypeEnum: AttachmentType){
         
@@ -182,7 +206,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 DispatchQueue.main.async {[weak self] in
                     self?.showAlertForProductFound(result: topResult.identifier, confidence: Int(topResult.confidence * 100))
 //                    self?.descriptionLabel.text = "\(topResult.identifier) with \(Int(topResult.confidence * 100))% confidence"
-                    self?.descriptionLabel.text = "\(topResult.identifier)"
+                    self?.descriptionLabel.text = "We think it's\n" + "\(topResult.identifier)"
                 }
             }
             
@@ -221,9 +245,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     func getProdDetails(prodName: String) {
-        let prodListVC = storyboard?.instantiateViewController(withIdentifier: "ProductsListViewControllerId") as! ProductsListViewController
-        prodListVC.prodName = prodName
-        navigationController?.show(prodListVC, sender: self)
+        if (prodName != "") {
+            let prodListVC = storyboard?.instantiateViewController(withIdentifier: "ProductsListViewControllerId") as! ProductsListViewController
+            prodListVC.prodName = prodName
+            navigationController?.show(prodListVC, sender: self)
+        }
     }
 }
 
